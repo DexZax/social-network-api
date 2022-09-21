@@ -28,11 +28,13 @@ const thoughtController = {
   createThought({ body }, res) {
     Thought.create(body)
       .then(({ _id }) => {
+        console.log(_id)
         return User.findOneAndUpdate(
           { _id: body.userId },
-          { $push: { comments: _id } },
+          { $push: { thoughts: _id } },
           { new: true }
         );
+    
       })
       .then((dbThoughtData) => {
         if (!dbThoughtData) {
@@ -47,7 +49,7 @@ const thoughtController = {
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate(
       { _id: params.id },
-      { $push: { reactions: body } },
+      { $set: body},
       { new: true, runValidators: true }
     )
       .then((dbThoughtData) => {
@@ -85,9 +87,10 @@ const thoughtController = {
   },
 
   addReaction({ params, body }, res) {
+    console.log(params)
     Thought.findOneAndUpdate(
-      { _id: params.id },
-      { $push: { replies: body } },
+      { _id: params.thoughtId },
+      { $push: { reactions: body } },
       { new: true, runValidators: true }
     )
       .then((dbUserData) => {
@@ -102,7 +105,7 @@ const thoughtController = {
 
   removeReaction({ params }, res) {
     Thought.findOneAndUpdate(
-      { _id: params.id },
+      { _id: params.thoughtId },
       { $pull: { reactions: { reactionId: params.reactionId } } },
       { new: true }
     )

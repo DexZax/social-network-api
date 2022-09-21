@@ -12,7 +12,7 @@ const ReactionSchema = new Schema(
       required: true,
       trim: true
     },
-    writtenBy: {
+    username: {
       type: String,
       required: true, 
       trim: true
@@ -32,10 +32,9 @@ const ReactionSchema = new Schema(
 
 const ThoughtSchema = new Schema(
   {
-    writtenBy: {
+    username: {
       type: String,
       required: true,
-      trim: true
     },
     thoughtBody: {
       type: String,
